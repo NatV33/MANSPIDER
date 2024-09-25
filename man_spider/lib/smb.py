@@ -39,11 +39,11 @@ class SMBClient:
                 sharename = resp[i]['shi1_netname'][:-1]
                 log.debug(f'{self.server}: Found share: {sharename}')
                 yield sharename
-            
+
         except Exception as e:
             e = handle_impacket_error(e, self)
             log.warning(f'{self.server}: Error listing shares: {e}')
-            
+
 
 
     def login(self, refresh=False, first_try=True):
@@ -93,26 +93,6 @@ class SMBClient:
 
                 if type(e) != AssertionError:
                     e = handle_impacket_error(e, self, display=True)
-
-                # try guest account, then null session if logon failed
-                if first_try:
-
-                    bad_statuses = ['LOGON_FAIL', 'PASSWORD_EXPIRED', 'LOCKED_OUT', 'SESSION_DELETED']
-                    if any([s in str(e) for s in bad_statuses]):
-                        for s in bad_statuses:
-                            if s in str(e):
-                                log.warning(f'{self.server}: {s}: {self.username}')
-
-                    log.debug(f'{self.server}: Trying guest session')
-                    self.username = 'Guest'
-                    self.password = ''
-                    self.domain = ''
-                    self.nthash = ''
-                    guest_success = self.login(refresh=True, first_try=False)
-                    if not guest_success:
-                        log.debug(f'{self.server}: Switching to null session')
-                        self.username = ''
-                        self.login(refresh=True, first_try=False)
 
             return False
 
