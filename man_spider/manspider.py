@@ -76,6 +76,9 @@ def main():
 
     Example 4: Search for finance-related files
     $ manspider share.evilcorp.local --dirnames bank financ payable payment reconcil remit voucher vendor eft swift -f '[0-9]{5,}' -d evilcorp -u bob -p Passw0rd
+
+    # PS
+    This manspider version do not use guest and null sessions automatically.
     '''
 
     parser = argparse.ArgumentParser(description='Scan for juicy data on SMB shares. Matching files and logs are stored in $HOME/.manspider. All filters are case-insensitive.')
